@@ -1,4 +1,5 @@
 services:
+  # Настройки Xdebug для PHP-FPM
   laravel-php-nginx-socket:
     environment:
       XDEBUG_MODE: "debug"

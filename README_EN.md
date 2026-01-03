@@ -29,9 +29,9 @@ A minimalist base project for Laravel using the PHP-FPM + Nginx stack (via Unix 
    ```
 
 4. **Accessing Services:**
-   - Web App: [http://localhost](http://localhost)
-   - pgAdmin: [http://localhost:8080](http://localhost:8080)
-   - PostgreSQL: `localhost:5432`
+    - Web App: [http://localhost](http://localhost)
+    - pgAdmin: [http://localhost:8080](http://localhost:8080) (email: `admin@example.com`, pass: `admin`)
+    - PostgreSQL: `localhost:5432`
 
 ## Key Commands (Makefile)
 
@@ -39,16 +39,20 @@ A minimalist base project for Laravel using the PHP-FPM + Nginx stack (via Unix 
 - `make down` — stop containers
 - `make restart` — restart containers
 - `make build` — build images
+- `make rebuild` — rebuild images without cache
 - `make laravel-install` — install fresh Laravel in `src/`
+- `make xdebug-up` — start with Xdebug enabled
 - `make artisan CMD="migrate"` — run artisan commands
 - `make composer CMD="install"` — run composer commands
 - `make migrate` — run migrations
 - `make rollback` — rollback migrations
 - `make fresh` — recreate DB and run seeds
 - `make tinker` — run Laravel Tinker
-- `make test` — run tests
+- `make test-php` — run tests (PHPUnit)
 - `make permissions` — fix storage/cache permissions
 - `make shell-php` — enter PHP container shell
+- `make shell-postgres` — enter PostgreSQL shell
+- `make logs` — view logs of all containers
 - `make clean` — remove containers and volumes (clear DB)
 
 ## Features
@@ -56,4 +60,4 @@ A minimalist base project for Laravel using the PHP-FPM + Nginx stack (via Unix 
 - Nginx DocumentRoot configured to `src/public`.
 - The entire Laravel project is located in the `src/` subfolder, keeping Docker configuration separate from application code.
 - PostgreSQL 17.
-- Ready-to-use Dockerfile with all necessary extensions for Laravel.
+- Ready-to-use Dockerfile with all necessary extensions for Laravel (pdo_pgsql, gd, intl, zip, opcache, xdebug, etc.).

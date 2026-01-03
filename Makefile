@@ -100,7 +100,7 @@ shell-nginx: ## Подключиться к контейнеру Nginx
 shell-postgres: ## Подключиться к PostgreSQL CLI
 	docker compose exec $(POSTGRES_CONTAINER) psql -U $$(grep POSTGRES_USER $(ENV_FILE) | cut -d '=' -f 2) -d $$(grep POSTGRES_DB $(ENV_FILE) | cut -d '=' -f 2)
 
-# --- Laravel команды ---
+# --- Команды Laravel ---
 
 laravel-install: up ## Создать новый проект Laravel в ./src
 	@if [ -f src/artisan ]; then \
@@ -131,12 +131,12 @@ fresh: ## Пересоздать базу и запустить сиды
 tinker: ## Запустить Laravel Tinker
 	docker compose exec $(PHP_CONTAINER) php artisan tinker
 
-test: ## Запустить тесты
+test-php: ## Запустить тесты PHP (PHPUnit)
 	docker compose exec $(PHP_CONTAINER) php artisan test
 
 permissions: ## Исправить права доступа для Laravel (storage/cache)
 	@echo "$(YELLOW)Исправление прав доступа...$(NC)"
-	docker compose exec $(PHP_CONTAINER) sh -c "chown -R www-data:www-data storage bootstrap/cache && chmod -R ug+rwX storage bootstrap/cache"
+	docker compose exec $(PHP_CONTAINER) sh -c "if [ -d storage ]; then chown -R www-data:www-data storage bootstrap/cache && chmod -R ug+rwX storage bootstrap/cache; fi"
 	@echo "$(GREEN)✓ Права доступа исправлены$(NC)"
 
 info: ## Показать информацию о проекте
@@ -169,6 +169,7 @@ validate: ## Проверить доступность сервисов по HTT
 	@echo "$(YELLOW)Статус контейнеров:$(NC)"
 	@docker compose ps --format "table {{.Name}}\t{{.Status}}\t{{.Ports}}"
 
+
 clean: ## Удалить контейнеры и тома
 	docker compose down -v
 	@echo "$(RED)! Контейнеры и данные БД удалены$(NC)"
@@ -181,7 +182,7 @@ clean-all: ## Полная очистка (контейнеры, образы, �
 dev-reset: clean-all build up ## Сброс среды разработки
 	@echo "$(GREEN)✓ Среда разработки сброшена и перезапущена!$(NC)"
 
-# Composer команды
+# --- Команды Composer ---
 composer-install: ## Установить зависимости через Composer
 	docker compose exec $(PHP_CONTAINER) composer install
 
